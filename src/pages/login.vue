@@ -53,6 +53,7 @@ export default {
       this.$axios({
         method: "POST",
         url: "/login",
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         data: {
           email: this.email,
           password: this.password,
@@ -103,7 +104,7 @@ export default {
 }
 
 ::placeholder {
-  color: white;
+  color: black;
   opacity: 0.5; /* Firefox */
 }
 
@@ -115,7 +116,7 @@ export default {
 }
 
 #cardLogin {
-  color: white;
+  color: black;
   width: 30rem;
   border-radius: 20px;
   background-color: transparent;
