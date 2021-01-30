@@ -53,7 +53,6 @@ export default {
       this.$axios({
         method: "POST",
         url: "/login",
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         data: {
           email: this.email,
           password: this.password,
