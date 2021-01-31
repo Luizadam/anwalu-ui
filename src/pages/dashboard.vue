@@ -45,11 +45,14 @@
         </mdb-modal-footer>
       </mdb-modal>
     </template>
+    <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" :color="'#3F51B5'"></loading>
   </section>
 </template>
 <script>
 import navbar from "../components/navbar";
 import Swal from 'sweetalert2'
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import {
   mdbModal,
   mdbModalHeader,
@@ -74,12 +77,14 @@ export default {
     mdbInput,
     mdbListGroup,
     mdbListGroupItem,
+    Loading
   },
   data() {
     return {
       modal: false,
       nama: "",
-      dataUser:[]
+      dataUser:[],
+      isLoading:false
     };
   },
   created(){
@@ -94,21 +99,23 @@ export default {
           fullname:this.nama
         }
       })
-      .then((res) =>{
-        console.log(res)
+      .then(() =>{
         this.modal = false
-        this.nama = ""
         this.getUser()
+        this.nama = ""
+        
       })
     },
 
     getUser(){
+      this.isLoading = true
       this.$axios({
         methods:"GET",
         url:'/data/user',
       })
       .then((res)=>{
         this.dataUser = res.data
+        this.isLoading = false
         console.log(this.dataUser)
       })
     },

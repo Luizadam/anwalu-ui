@@ -36,20 +36,28 @@
         </div>
       </div>
     </div>
+        <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" :color="'#3F51B5'"></loading>
   </div>
 </template>
 <script>
 import Swal from 'sweetalert2'
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "login",
+  components:{
+    Loading
+  },
   data() {
     return {
       email: "",
       password: "",
+      isLoading:false
     };
   },
   methods: {
     login() {
+      this.isLoading = true
       this.$axios({
         method: "POST",
         url: "/login",
@@ -60,6 +68,7 @@ export default {
       }).then((res) => {
         console.log(res);
             localStorage.setItem("user", JSON.stringify(res.data));
+            this.isLoading = false
             this.$router.push("/");
         
       }).catch(() =>{

@@ -68,11 +68,14 @@
         </mdb-modal-footer>
       </mdb-modal>
     </template>
+    <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="true" :color="'#3F51B5'"></loading>
   </section>
 </template>
 <script>
 import navbar from "../components/navbar";
 import Swal from 'sweetalert2'
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import {
   mdbModal,
   mdbModalHeader,
@@ -96,7 +99,8 @@ export default {
     mdbBtn,
     mdbInput,
     mdbListGroup,
-    mdbListGroupItem
+    mdbListGroupItem,
+    Loading
   },
   data() {
     return {
@@ -105,6 +109,7 @@ export default {
       harga: "",
       total: 0,
       dataKasbon: [],
+      isLoading:false
     };
   },
   created() {
@@ -116,6 +121,7 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
     getKasbon() {
+      this.isLoading = true 
       this.$axios({
         method: "GET",
         url: "/data/kasbon/" + this.$route.params.id,
@@ -123,10 +129,10 @@ export default {
         console.log(res);
         this.dataKasbon = res.data;
         this.total = this.dataKasbon.total;
+        this.isLoading = false
       });
     },
     submitKasbon() {
-      console.log(this.nama, this.harga);
       this.$axios({
         method: "POST",
         url: "/data/kasbon",
@@ -137,9 +143,10 @@ export default {
         },
       }).then(() => {
         this.getKasbon();
+        this.modal = false;
         this.nama = "";
         this.harga = "";
-        this.modal = false;
+        
       });
     },
     deleteConfirm(event,id) {
